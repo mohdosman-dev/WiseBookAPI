@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const pump = require("util").promisify(require("stream").pipeline);
 const { v4: uuidv4 } = require("uuid");
+const { saveFile } = require("../utils/utils");
 
 /**  Get all users for admin
  * @param {Object} req - The request object
@@ -140,12 +141,16 @@ const register = async (req, res) => {
       throw new Error("User already exists");
     }
 
-    for (const file of Object.values(files)) {
-      const originalName = file.filename || `upload.png`;
-      const filename = `${uuidv4()}-${originalName}`;
-      const uploadPath = path.join(process.cwd(), "uploads", "image", filename);
-      await pump(file.file, fs.createWriteStream(uploadPath));
-      imageFilename = filename;
+    for (const { file, filename: originalName } of Object.values(files)) {
+      if (!file || typeof file.pipe !== "function") {
+        req.log.error("Invalid file stream:", file);
+        return res
+          .status(400)
+          .send({ message: "Uploaded file is invalid or missing" });
+      }
+
+      const filename = `${uuidv4()}-${originalName || "upload.png"}`;
+      imageFilename = await saveFile(file, "image/users", filename);
     }
 
     const newUser = new User({
@@ -183,19 +188,25 @@ const register = async (req, res) => {
  */
 const getUserById = async (req, res) => {
   const { User } = req.server.mongoose.models;
-  const { id } = req.params;
-  User.findById(id, (err, user) => {
-    if (err) {
-      res.status(500).send({ error: "Error fetching user" });
-    } else if (!user) {
-      res.status(404).send({ error: "User not found" });
-    } else {
-      res.send({
-        message: "User fetched successfully",
-        data: user,
-      });
+  let { id } = req.params;
+  if (!id) {
+    id = req.user.userId;
+  }
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).send({ message: "User not found" });
+      throw new Error("User not found");
     }
-  });
+    return res.status(200).send({
+      message: "User fetched successfully",
+      data: user,
+    });
+  } catch (err) {
+    req.log.error(err);
+    return res.status(500).send({ message: "Internal server error" });
+    throw new Error(err);
+  }
 };
 
 /**
@@ -215,7 +226,6 @@ const updateUser = async (req, res) => {
   const { User } = req.server.mongoose.models;
   const { id } = req.params;
   const { name, email } = req.body;
-  
 };
 
 /**

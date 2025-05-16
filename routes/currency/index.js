@@ -2,14 +2,7 @@ const {
   getCurrencies,
   createCurrency,
 } = require("../../controllers/currencyController");
-
-const Currency = {
-  type: "object",
-  properties: {
-    _id: { type: "string" },
-    name: { type: "string" },
-  },
-};
+const { Currency } = require("../../models/fastifySchemas");
 
 const currencyOpts = {
   schema: {
@@ -35,6 +28,11 @@ const createCurrencyOpts = {
   schema: {
     description: "Create a new currency",
     tags: ["Currency"],
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
     body: {
       type: "object",
       required: ["name"],
@@ -55,5 +53,8 @@ const createCurrencyOpts = {
 };
 
 module.exports = async function (fastify, opts) {
-  fastify.get("/", currencyOpts).post("/", createCurrencyOpts);
+  fastify.get("/", currencyOpts).post("/", {
+    ...createCurrencyOpts,
+    preHandler: [fastify.authenticate, fastify.authorizeAdmin],
+  });
 };

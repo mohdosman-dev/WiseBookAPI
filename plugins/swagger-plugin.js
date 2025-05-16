@@ -12,6 +12,15 @@ module.exports = fp(async function (fastify, opts) {
           version: "1.0.0",
         },
         servers: [{ url: `http://127.0.0.1:${port}/api/v1` }],
+        components: {
+          securitySchemes: {
+            bearerAuth: {
+              type: "http",
+              scheme: "bearer",
+              bearerFormat: "JWT", // optional
+            },
+          },
+        },
       },
     });
 

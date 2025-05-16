@@ -64,3 +64,4 @@ profile*
 # rest calls
 http/
 uploads/
+public/uploads

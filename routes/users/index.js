@@ -6,28 +6,17 @@ const {
   updateUser,
   deleteUser,
 } = require("../../controllers/userController");
-
-const User = {
-  type: "object",
-  properties: {
-    _id: { type: "string" },
-    firstName: { type: "string" },
-    lastName: { type: "string" },
-    username: { type: "string" },
-    email: { type: "string" },
-    countryCode: { type: "string" },
-    phone: { type: "string" },
-    image: { type: "string" },
-    isVerified: { type: "integer" },
-    isActive: { type: "boolean" },
-    isAdmin: { type: "boolean", default: false },
-  },
-};
+const { User } = require("../../models/fastifySchemas");
 
 const usersOpts = {
   schema: {
     description: "Get all users (for admin only)",
     tags: ["User"],
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
     response: {
       200: {
         type: "object",
@@ -86,24 +75,12 @@ const registerOpts = {
         password: { type: "string" },
         image: { format: "binary" }, // For file upload
       },
-      // required: [
-      //   "email",
-      //   "password",
-      //   "firstName",
-      //   "lastName",
-      //   "username",
-      //   "countryCode",
-      //   "phone",
-      // ],
     },
     response: {
-      200: {
+      201: {
         type: "object",
         properties: {
-          data: {
-            type: "object",
-            items: User,
-          },
+          data: User,
           message: { type: "string" },
           token: { type: "string" },
         },
@@ -117,14 +94,16 @@ const getUserByIdOpts = {
   schema: {
     description: "Get user by ID (or get current user data)",
     tags: ["User"],
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
     response: {
       200: {
         type: "object",
         properties: {
-          data: {
-            type: "object",
-            items: User,
-          },
+          data: User,
           message: { type: "string" },
         },
       },
@@ -137,6 +116,11 @@ const updateUserOpts = {
   schema: {
     description: "Update user by ID or update current user data",
     tags: ["User"],
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
     response: {
       200: {
         type: "object",
@@ -152,11 +136,17 @@ const updateUserOpts = {
   },
   handler: updateUser,
 };
+
 const deleteUserOpts = {
   schema: {
     description:
       "Delete user by ID (for admin only , delete account will be implemented later)",
     tags: ["User"],
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
     response: {
       200: {
         type: "object",
@@ -172,7 +162,6 @@ const deleteUserOpts = {
   },
   handler: deleteUser,
 };
-
 module.exports = async function (fastify, opts) {
   fastify.get("/", {
     ...usersOpts,
