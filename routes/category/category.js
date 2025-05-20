@@ -5,7 +5,7 @@ const {
   updateCategory,
   deleteCategory,
 } = require("../../controllers/categoryController");
-const { Category } = require("../../models/fastifySchemas");
+const { Category, SubCategory } = require("../../models/fastifySchemas");
 
 const getCategoriesOpts = {
   schema: {
@@ -136,6 +136,7 @@ const deleteCategoryOpts = {
 };
 
 module.exports = async function (fastify, opts) {
+  fastify.addSchema(SubCategory);
   fastify.get("/", getCategoriesOpts);
   fastify.get("/:id", getCategoryByIdOpts);
   fastify.post("/", {

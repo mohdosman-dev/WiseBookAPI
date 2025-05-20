@@ -13,9 +13,20 @@ const { v4: uuidv4 } = require("uuid");
 const getCategories = async (req, res) => {
   try {
     const { Category } = await req.server.mongoose.models;
-    const categories = await Category.find({});
+
+    const allCategories = await Category.aggregate([
+      {
+        $lookup: {
+          from: "subcategories",
+          localField: "_id",
+          foreignField: "category",
+          as: "subcategories",
+        },
+      },
+    ]);
+
     return res.send({
-      data: categories,
+      data: allCategories,
       message: "Categories retrieved successfully",
     });
   } catch (error) {

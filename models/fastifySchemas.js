@@ -33,6 +33,10 @@ const Category = {
     name: { type: "string" },
     description: { type: "string" },
     image: { type: "string" },
+    subcategories: {
+      type: "array",
+      items: { $ref: "SubCategory" },
+    },
   },
 };
 
@@ -44,8 +48,29 @@ const SubCategory = {
     name: { type: "string" },
     description: { type: "string" },
     image: { type: "string" },
-    category: { $ref: "Category#" },
+    category: { $ref: "Category" },
     isActive: { type: "number" },
+  },
+};
+
+const Author = {
+  type: "object",
+  $id: "Author",
+  properties: {
+    _id: { type: "string" },
+    name: { type: "string" },
+    sinceYear: { type: "number" },
+    description: { type: "string" },
+    image: { type: "string" },
+    links: {
+      type: "object",
+      properties: {
+        facebookUrl: { type: "string" },
+        instagramUrl: { type: "string" },
+        youtubeUrl: { type: "string" },
+        websiteUrl: { type: "string" },
+      },
+    },
   },
 };
 
@@ -54,4 +79,5 @@ module.exports = {
   Currency,
   Category,
   SubCategory,
+  Author,
 };
