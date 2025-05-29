@@ -1,7 +1,7 @@
 {
-  "name": "backend-ex",
+  "name": "wise-book-api",
   "version": "1.0.0",
-  "description": "This project was bootstrapped with Fastify-CLI.",
+  "description": "A RESTful API service for managing ebooks, including user authentication, ebook catalog, and administrative features.",
   "main": "app.js",
   "directories": {
     "test": "test"
