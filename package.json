@@ -29,5 +29,8 @@
     "fastify-plugin": "^5.0.0",
     "mongoose": "^8.14.3",
     "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "form-data": "^4.0.2"
   }
 }
