@@ -1,23 +1,59 @@
-# Getting Started with [Fastify-CLI](https://www.npmjs.com/package/fastify-cli)
-This project was bootstrapped with Fastify-CLI.
+# Admin Backend Example
+
+This project is an example backend built with [Fastify](https://fastify.dev/), using [Fastify-CLI](https://www.npmjs.com/package/fastify-cli) for setup and development.
+
+## Features
+
+- Fast and lightweight backend powered by Fastify
+- Modular plugin and route architecture
+- Hot-reloading for efficient development
+- Ready-to-use testing setup
+- Easily extensible for new APIs and plugins
+- Clear project structure for maintainability
+- Production-ready configuration options
+
+## Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (v14 or higher)
+- [npm](https://www.npmjs.com/)
+
+### Installation
+
+```bash
+npm install
+```
 
 ## Available Scripts
 
-In the project directory, you can run:
+- **Development mode:**  
+    Start the server with hot-reloading:
+    ```bash
+    npm run dev
+    ```
+    Visit [http://localhost:3000](http://localhost:3000) in your browser.
 
-### `npm run dev`
+- **Production mode:**  
+    Start the server for production:
+    ```bash
+    npm start
+    ```
 
-To start the app in dev mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **Run tests:**  
+    Execute all test cases:
+    ```bash
+    npm run test
+    ```
 
-### `npm start`
+## Project Structure
 
-For production mode
-
-### `npm run test`
-
-Run the test cases.
+- `plugins/` – Fastify plugins and hooks
+- `routes/` – API route definitions
+- `test/` – Automated tests
 
 ## Learn More
 
-To learn Fastify, check out the [Fastify documentation](https://fastify.dev/docs/latest/).
+- [Fastify Documentation](https://fastify.dev/docs/latest/)
+- [Fastify-CLI Documentation](https://github.com/fastify/fastify-cli)
+
